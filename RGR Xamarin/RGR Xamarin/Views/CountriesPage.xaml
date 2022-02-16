@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RGR_Xamarin.Views.CountriesPage"
+             xmlns:vm="clr-namespace:RGR_Xamarin.ViewModels"
+             xmlns:model="clr-namespace:RGR_Xamarin.Models">
+
+    <!--<ContentPage.BindingContext>
+        <vm:CountriesViewModel />
+    </ContentPage.BindingContext>-->
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry x:Name="nameEntry"
+               Placeholder="Name"
+               Text="{Binding SelectedCountry.Name}">
+            </Entry>
+
+            <Button
+                Text="Add Country"
+                Command="{Binding AddCountryCommand}">
+            </Button>
+            <Button
+                Text="Update Country"
+                Command="{Binding UpdateCountryCommand}">
+            </Button>
+            <Button
+                Text="Delete Country"
+                Command="{Binding DeleteCountryCommand}">
+            </Button>
+
+
+            <RefreshView x:DataType="vm:CountriesViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView x:Name="collectionView" ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}" SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout x:DataType="model:Country">
+                                <Label 
+                                    Text="{Binding Name}"
+                                    BackgroundColor="White"
+                                    HeightRequest="40"
+                                    VerticalTextAlignment="Center"
+                                    FontSize="Medium"
+                                    TextColor="Black">
+                                </Label>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

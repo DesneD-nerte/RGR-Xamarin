@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RGR_Xamarin.Views.MoviesPage"
+              xmlns:vm="clr-namespace:RGR_Xamarin.ViewModels"
+             xmlns:model="clr-namespace:RGR_Xamarin.Models"
+             xmlns:lv="clr-namespace:Xamarin.Forms.MultiSelectListView;assembly=Xamarin.Forms.MultiSelectListView" x:DataType="vm:MoviesViewModel" Padding="0,0,0,0">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout HeightRequest="500">
+                    <Entry 
+                        x:Name="nameEntry"
+                        Placeholder="Name"
+                        Text="{Binding SelectedMovie.Name}">
+                    </Entry>
+                    <Entry 
+                        x:Name="descriptionEntry"
+                        Placeholder="Description"
+                        Text="{Binding SelectedMovie.Description}">
+                    </Entry>
+                    <TimePicker
+                        x:Name="pickerTime"
+                        Time="{Binding SelectedMovie.Duration}">
+                    </TimePicker>
+                    <DatePicker
+                        x:Name="pickerDate"
+                        MinimumDate="1900.01.01"
+                        MaximumDate="2022.01.01"
+                        Date="{Binding SelectedMovie.Release}">
+                    </DatePicker>
+                    <ListView ItemsSource="{Binding Actors}"
+                                lv:MultiSelect.Enable="True"
+                                HasUnevenRows="True"
+                                SeparatorVisibility="Default">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Actor">
+                                <lv:SelectableCell x:Name="SelectableCell">
+                                    <lv:SelectableCell.CheckView>
+                                        <Image Source="icon_select.png" WidthRequest="20" HeightRequest="20"></Image>
+                                    </lv:SelectableCell.CheckView>
+
+                                    <lv:SelectableCell.DataView>
+                                        <StackLayout Orientation="Vertical">
+                                            <StackLayout Orientation="Horizontal" Padding="0,0,0,0">
+                                                <Label Text="Name: "></Label>
+                                                <Label Text="{Binding Name}"></Label>
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal" Padding="0,0,0,0">
+                                                <Label Text="Surname: "></Label>
+                                                <Label Text="{Binding Surname}"></Label>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </lv:SelectableCell.DataView>
+                                </lv:SelectableCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                        <ListView.Behaviors>
+                            <lv:SelectedItemBehavior Command="{Binding AddActorCommand}"/>
+                        </ListView.Behaviors>
+
+                    </ListView>
+
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                        <Button 
+                            Text="Add Movie" 
+                            Command="{Binding AddMovieCommand}">
+                        </Button>
+                        <Button 
+                            Text="Update Movie" 
+                            Command="{Binding UpdateMovieCommand}">
+                        </Button>
+                        <Button 
+                            Text="Delete Movie" 
+                            Command="{Binding DeleteMovieCommand}">
+                        </Button>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" >
+                        <Button ClassId="ClassicFilter"
+                            Text="Filter">
+                        </Button>
+                        <Button ClassId="LinqFilter"
+                            Text="Linq Filter">
+                        </Button>
+                        <Button
+                            Text="Scan QR">
+                        </Button>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+
+            <BoxView BackgroundColor="Black"
+                     HeightRequest="2">
+            </BoxView>
+            
+            <RefreshView x:DataType="vm:MoviesViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView x:Name="collectionView" ItemsSource="{Binding Movies}" SelectedItem="{Binding SelectedMovie}" SelectionChangedCommand="{Binding SetIsSelectedActorsCommand}" SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout BackgroundColor="White" x:DataType="model:Movie">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Name:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding Name}" FontSize="Medium"></Label>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Description:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding Description}" FontSize="Medium"></Label>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Duration:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding Duration}" FontSize="Medium"></Label>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Release:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding Release}" FontSize="Medium"></Label>
+                                </StackLayout>
+                                <BoxView HeightRequest="10"></BoxView>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

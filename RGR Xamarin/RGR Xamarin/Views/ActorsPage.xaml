@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RGR_Xamarin.Views.ActorsPage"
+             xmlns:vm="clr-namespace:RGR_Xamarin.ViewModels"
+             xmlns:model="clr-namespace:RGR_Xamarin.Models"
+             xmlns:lv="clr-namespace:Xamarin.Forms.MultiSelectListView;assembly=Xamarin.Forms.MultiSelectListView" x:DataType="vm:ActorsViewModel" Padding="0,0,0,0">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout HeightRequest="350">
+                    <Entry 
+                        x:Name="nameEntry"
+                        Placeholder="Name"
+                        Text="{Binding SelectedActor.Name}">
+                    </Entry>
+                    <Entry 
+                        x:Name="surnameEntry"
+                        Placeholder="Surname"
+                        Text="{Binding SelectedActor.Surname}">
+                    </Entry>
+                    <DatePicker
+                        x:Name="pickerDate"
+                        MinimumDate="1900.01.01"
+                        MaximumDate="2022.01.01"
+                        Date="{Binding SelectedActor.BirthDay}">
+                    </DatePicker>
+                    <Picker
+                        x:Name="pickerCountry"
+                        Title="Select Country"
+                        ItemsSource="{Binding Countries}"
+                        SelectedItem="{Binding SelectedActor.Country}">
+                    </Picker>
+                    <ListView ItemsSource="{Binding Movies}"
+                                lv:MultiSelect.Enable="True"
+                                HasUnevenRows="True"
+                                SeparatorVisibility="Default">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Movie">
+                                <lv:SelectableCell x:Name="SelectableCell">
+                                    <lv:SelectableCell.CheckView>
+                                        <Image Source="icon_select.png" WidthRequest="20" HeightRequest="20"></Image>
+                                    </lv:SelectableCell.CheckView>
+
+                                    <lv:SelectableCell.DataView>
+                                        <StackLayout Orientation="Vertical" Padding="0,0,0,0">
+                                            <Label Text="123"></Label>
+                                            <Label Text="{Binding Name}" FontSize="17" ></Label>
+                                        </StackLayout>
+                                    </lv:SelectableCell.DataView>   
+                                </lv:SelectableCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                        <Button 
+                            Text="Add Actor" 
+                            Command="{Binding AddActorCommand}">
+                        </Button>
+                        <Button 
+                            Text="Update Actor" 
+                            Command="{Binding UpdateActorCommand}">
+                        </Button>
+                        <Button 
+                            Text="Delete Actor" 
+                            Command="{Binding DeleteActorCommand}">
+                        </Button>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" >
+                        <Button ClassId="ClassicFilter"
+                            Text="Filter">
+                        </Button>
+                        <Button ClassId="LinqFilter"
+                            Text="Linq Filter">
+                        </Button>
+                        <Button
+                            Text="Scan QR">
+                        </Button>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+
+            <RefreshView x:DataType="vm:ActorsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView x:Name="collectionView" ItemsSource="{Binding Actors}" SelectedItem="{Binding SelectedActor}" SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout BackgroundColor="White" x:DataType="model:Actor">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Name:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding Name}" FontSize="Medium"></Label>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Surname:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding Surname}" FontSize="Medium"></Label>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Birthday:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding BirthDay}" FontSize="Medium"></Label>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Country:" FontSize="Medium"></Label>
+                                    <Label Text="{Binding Country}" FontSize="Medium"></Label>
+                                </StackLayout>
+                                <BoxView HeightRequest="10"></BoxView>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
