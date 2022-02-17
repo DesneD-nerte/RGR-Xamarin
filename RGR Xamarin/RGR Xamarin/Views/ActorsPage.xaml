@@ -71,14 +71,13 @@
                     </StackLayout>
 
                     <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" >
-                        <Button ClassId="ClassicFilter"
-                            Text="Filter">
-                        </Button>
-                        <Button ClassId="LinqFilter"
-                            Text="Linq Filter">
+                        <Button ClassId="Filter"
+                            Text="Filter"
+                            Command="{Binding FilterCommand}">
                         </Button>
                         <Button
-                            Text="Scan QR">
+                            Text="Scan QR"
+                            Command="{Binding ScanQRCommand}">
                         </Button>
                     </StackLayout>
                 </StackLayout>

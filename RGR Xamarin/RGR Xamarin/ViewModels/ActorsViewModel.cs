@@ -1,4 +1,6 @@
-﻿using RGR_Xamarin.Models;
+﻿using Newtonsoft.Json;
+using RGR_Xamarin.Models;
+using RGR_Xamarin.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.MultiSelectListView;
+using ZXing.Net.Mobile.Forms;
 
 namespace RGR_Xamarin.ViewModels
 {
@@ -64,12 +67,40 @@ namespace RGR_Xamarin.ViewModels
             UpdateActorCommand = new Command(async () => await UpdateActor());
 
             DeleteActorCommand = new Command(async () => await DeleteActor());
+
+            FilterCommand = new Command(async () => await FilterActor());
+
+            ScanQRCommand = new Command(async () => await ScanQrActor());
+        }
+
+        private Task FilterActor()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task ScanQrActor()
+        {
+            var lol = new ZXingScannerView();
+            var scan = new ZXingScannerPage();
+            await App.Current.MainPage.Navigation.PushAsync(scan);
+
+            scan.OnScanResult += (result) =>
+            {
+                Actor actor = JsonConvert.DeserializeObject<Actor>(result.Text);
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await App.DataBase.SaveActorAsync(actor);
+                    App.Current.MainPage.Navigation.RemovePage(scan);
+                });
+            };
         }
 
         public ICommand AddActorCommand { get; }
         public ICommand UpdateActorCommand { get; }
         public ICommand DeleteActorCommand { get; }
         public ICommand LoadItemsCommand { get; }
+        public ICommand FilterCommand { get; }
+        public ICommand ScanQRCommand { get; }
 
 
         public async Task GetAllActors()
